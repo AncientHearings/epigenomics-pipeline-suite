@@ -1,0 +1,60 @@
+pipeline {
+    agent any 
+This starts a declarative pipeline. agent any tells Jenkins to ruin this on all avaible machin.
+
+stages {
+#Define stages
+
+#Stage1: Checkout Code
+
+            stage('Checkout Code') {
+            steps {
+                echo "📥 Cloning the repository"
+                checkout scm
+            }
+        }
+
+checkout scm = Jenkins pull the repo 
+Bring all files , including Dockerfile and Jenkinsfile
+
+Stage 2: Build Docker Image
+
+        stage('Build Docker Image') {
+            steps {
+                echo "🔧 Building FastQC Docker image"
+                sh 'docker build -t fastqc-image .'
+            }
+        }
+
+Builds the image using the dockerfile. 
+
+Stage 3: Run FastqQC Test 
+        stage('Run FastQC Version Test') {
+            steps {
+                echo "🚀 Running FastQC to verify installation"
+                sh 'docker run --rm fastqc-image fastqc --version'
+            }
+        }
+
+
+#Runs a container  from the built image 
+#Run the fastqc --version command to check if FastQC works
+#--rm removes the container after it runs(keeps it clean)
+
+
+
+#Final 
+
+    post {
+        success {
+            echo "✅ FastQC Docker pipeline completed successfully!"
+        }
+        failure {
+            echo "❌ FastQC Docker pipeline failed."
+        }
+    }
+
+
+post is for messages after pipeline finishes
+
+
