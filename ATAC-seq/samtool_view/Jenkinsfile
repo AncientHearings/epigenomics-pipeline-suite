@@ -1,0 +1,65 @@
+#This file is for building, testing and pushing the docker image 
+
+pipeline { //Declares a Jenkins Pipeline block 
+    agent any //Run the pipeline on any available Jenkins executor/agent node
+    
+    parameters { //Define parameters users can input when triggering the pipeline 
+       string(name: 'SAMTOOLS_VERSION', // Input field of type 'string'
+        defaultValue: '1.17', 
+        description: 'Version of samtools to install'
+        ) //Closing of the string parameter
+    } //Parameters block ends.
+      
+    environment { //Define environment variables throughput all stages 
+         IMAGE_NAME = "epigenomics/samtools_view:${params.SAMTOOLS_VERSION}" //Dynamically sets image with version
+    } //ENVIRONMENT BLOCK ENDS
+    
+    stages { //All pipeline logic is grouped inside "stages"
+    
+       steps('Clone') { //fetch source code from repo
+           steps { //"steps" block holds the actions to run
+              checkout scm //Built-in Jenkins step to pull the git repo used by the pipeline  
+           } //End of Clone steps
+       } //End of Clone stage
+       
+       stage('Build Docker Image') { //Stage for building the Docker Image
+          steps { // Tells Jenkins to run custom Groovy script block
+             script {
+                docker.build("${IMAGE_NAME}", "--build-arg "--build-arg SAMTOOLS_VERSION=${params.SAMTOOLS_VERSION} -f Dockerfile.samtools_view .") //Build docker image with ARG from input 
+              }
+           }
+       }
+       
+       stage('Test Samtools View') { //Test the image to verify it works
+            steps {
+                script {
+                    docker.image("${IMAGE_NAME}").inside { //Run commands inside the built container
+                        sh "samtools view --help" // Test if samtools is installed and working 
+                    }
+                }
+            }
+        }
+
+        stage('Push (Optional)') { //Optional push stage, gated by a flag
+            when { //Condition to check if this stage should run 
+                expression { return env.PUSH_TO_REGISTRY == 'true' } //Only run if this env is true
+            }
+            steps { //Securely load DockerHub credentials
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin" // log in to DockerHub 
+                    sh "docker push ${IMAGE_NAME}"//Push the image
+                }
+            }
+        }
+    } //End of stages
+}     //End of pipeline
+    
+    
+#..............................................................
+
+#Declares a Jenkins Pipeline block 
+#Run the pipeline on any available Jenkins executor/agent node
+
+#
+    
+    
