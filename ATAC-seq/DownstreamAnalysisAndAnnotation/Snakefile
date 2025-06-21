@@ -7,12 +7,14 @@ include: "rules/ChIPseeker.smk"
 
 #Define final targets
 rule all:
-     expand("data/output/{sample}_report.csv", sample=config["samples"]
+    input:
+     [
+       expand("data/output/{sample}_report.csv", sample=config["samples"])
        expand("data/output/{sample}.{format}", sample=config["samples"], format=config["params"]["plots"]["format"]),
-        expand("Benchmark/{sample}.txt", sample=config["samples"]),
-        expand("logs/stdout/{sample}.out", sample=config["samples"]),
-        expand("logs/stderr/{sample}.err", sample=config["samples"])
-        
+       expand("Benchmark/{sample}.txt", sample=config["samples"]),
+       expand("logs/stdout/{sample}.out", sample=config["samples"]),
+       expand("logs/stderr/{sample}.err", sample=config["samples"])
+     ] 
         
 
 
