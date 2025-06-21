@@ -10,7 +10,7 @@ touch run_chipseeker.R
 mkdir samples
 touch scaffold_structure.sh
 touch Snakefile 
-
+touch ReadMe.md
 #chmod +x scaffold_structure.sh
 #./scaffold_structure.sh
 
