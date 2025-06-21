@@ -1,7 +1,65 @@
-name: ChIPseeker_env
-channels: 
-  - bioconda
-  - conda-forge
-  - defaults
-dependencies:
-  - bioconductor-chipseeker=1.42.0 
+#....................ChIPseeker............................
+samples:  #How many to loop over?You can provide as much as number of samples to loop over.
+  - sample1
+  - sample2
+input:
+  ChIPseeker:
+    peak_file: "data/input/" #or, your preference
+
+output:
+  ChIPseeker:
+    csv: "data/output" # or,  your preference
+    plot: "data/output" #or,  your preference
+threads:
+  ChIPseeker:
+    number: 1 #Not multithreaded.
+logs:
+  standardoutput: "logs/stdout"
+  standarderror: "logs/stderr"
+temp:
+  intermediate:
+    files: "data/output/intermediate" #or, your pref
+params:  #The same option names are used as keys for readability and fast to implement in the rule
+  txdb: "TxDb.Mmusculus.UCSC.mm10.knownGene"#or, yours
+  tss_region: [-1000, 1000] #or, yours
+  organism : "mouse" #or, yours
+  peak_type: "narrowPeak"#or, yours
+  plots:
+      format: "pdf" #Or your format like "png"
+      title_1: ""#title please (e.g., "Peak Annotation for Sample 1")
+      #...
+      title_n: ""#title, please(e.g., "Peak Annotation for Sample N")
+      font_size: #number, please(e.g., , 12)
+      color_pallete: ""#Your choice, please( e.g., "Set1", "Dark2")
+      height: #number, please(e.g., 6)
+  keep_intermediate: true # or False
+  annotation_level: "gene"  #or your choice
+resources:
+  memory:
+    ChIPseeker:
+      default: 4000 #Usually sufficient
+      other: 8000 #For  large datasets
+  time:
+    ChIPseeker: "01:00:00" #Max for most cases
+version:
+  ChIPseeker: 1.42.0
+  genome_build: ""#Your preference, please(e.g., "mm10")
+
+retries:
+  ChIPseeker:
+     max_retries: 2 #Or your number for the number of times to try if the package software fails.
+     timeout: "02:00:00" #Or, your preference for job timeout
+
+
+#Well-defined comment.
+ #Comment are clear, concise and easy-to-read.
+#The rule is fully dynamic.
+
+
+#This is a configuration file which has inputs and outputs paths, tools parameters and other settings to make the workflow run dynamically.
+#These are dynamic pieces that change as per project. These pieces are controlled in a single file that let the rule remain untouched keeping
+#it's logical flow intact ensuring reproducibility. To create a configuration file means to create an object and store the value i.e., dynamic pieces into
+#in key-value pairs form. The value is separated from the key by a colon. The value can be accessed in the rule using the syntax config["key"]. If the value
+#is changed by the user as per necessities, the rule will react to it. This is meant by "To make the workflow run dynamically".
+
+#
