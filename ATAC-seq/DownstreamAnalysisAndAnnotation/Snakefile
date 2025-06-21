@@ -1,0 +1,32 @@
+#.....Load configuration file.................................
+configfile: "config.yaml"
+
+##...............include ChIPseeker rule......................
+
+include: "rules/ChIPseeker.smk"
+
+#Define final targets
+rule all:
+     expand("data/output/{sample}_report.csv", sample=config["samples"]
+       expand("data/output/{sample}.{format}", sample=config["samples"], format=config["params"]["plots"]["format"]),
+        expand("Benchmark/{sample}.txt", sample=config["samples"]),
+        expand("logs/stdout/{sample}.out", sample=config["samples"]),
+        expand("logs/stderr/{sample}.err", sample=config["samples"])
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+#That means snakefile will be read by snakemake to know what to build and using what . Also, consider the value provided in the configuration file for the configurations
+
+
