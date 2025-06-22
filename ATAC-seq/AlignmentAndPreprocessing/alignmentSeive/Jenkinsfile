@@ -1,0 +1,50 @@
+pipeline {
+    agent any 
+    
+    environment {
+        IMAGE = "alignmentseive:v1.0"
+        BAM_INPUT = "aligned/sample1.bam"
+        BAM_OUTPUT = "shifted/sample1.bam"
+    }
+       
+    stages {
+       stage ("Build the docker Image") {
+          steps {
+             script {
+               sh """ 
+               docker build -t \$IMAGE . 
+               """
+             }
+          }
+       }
+       
+       stage ("Run the alignmentSeive") {
+          steps {
+             script {
+                sh """
+                docker run \
+                   -v \$PWD:/data \
+                   -w /data \
+                   \$IMAGE \
+                   --bam \$BAM_INPUT \
+                   --outFile \$BAM_OUTPUT \
+                   --ATACshift
+                  """
+              }
+           }
+        }
+      }
+       
+       post {
+         success {
+            echo "Success"
+          }
+          
+         failure {
+            echo "failure"
+         }
+       }
+}
+         
+            
+         
