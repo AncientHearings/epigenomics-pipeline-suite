@@ -1,0 +1,50 @@
+pipeline {
+   agent any 
+   
+   environment {
+    IMAGE = "picard_markdup:v1.0"
+    INPUT = "input.bam" 
+    OUTPUT = "dedup.bam"
+    METRICS = "metrics.txt"
+   }
+   
+   stages {
+      stage ("Build a docker image") {
+        steps {
+          script {
+            sh """
+            docker build -t \$IMAGE
+            """
+          } 
+        }
+      } 
+
+      stage ("Run PicardMarkdupDuplicates) {
+        steps {
+          script {
+            sh """
+            docker run --rm \
+            -v $PWD:/data \
+            -w /data \
+            \$IMAGE \
+            I=\$INPUT \
+            O=\$OUTPUT \
+            M=$\METRICS \
+            REMOVE_DUPLICATES=true
+            """
+          }
+        }
+       }  
+     }
+      
+      post {
+        success {
+           echo "Marking duplicates succesfull"
+        }
+        
+        failure {
+           echo "Marking duplicates not successful"
+        }
+        
+      }
+}
