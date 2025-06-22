@@ -1,0 +1,46 @@
+pipeline {
+   agent any 
+   
+   environment {
+    IMAGE = "samtoolsfilter:v1.0"
+    BAM_INPUT = "aligned/sample1.bam"
+    BAM_OUTPUT = "filtered/sample1.filtered.bam"
+   }
+   
+   stages {
+     stage ("Build a docker image") {
+       steps {
+        script {
+          sh"""
+          docker build -t \$IMAGE 
+          """
+        } 
+       }
+     }
+     
+    
+      stage ("Run samtools view") {
+        steps {
+         script {
+           sh """
+           docker run --rm \\
+           -v \$PWD:/workspace \\
+           -w /workspace \\
+           \$IMAGE \\ 
+           view -b -q 30 -F 1804  \$BAM_INPUT > \$BAM_OUTPUT
+           """
+          }
+       }
+     }    
+      
+     post {
+       success {
+         echo "success"
+       }
+       
+       failure {
+         echo "Failure"
+       }
+     }
+} 
+           
