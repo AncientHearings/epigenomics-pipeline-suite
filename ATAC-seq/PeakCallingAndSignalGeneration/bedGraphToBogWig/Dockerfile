@@ -30,7 +30,7 @@ COPY --from=compiler  /opt/ucsc/bedGraphToBigWig /usr/local/bin/bedGraphToBigWIg
 
 ENV PATH=/opt/ucsc/:${PATH}
 
-WORKSPACE /workspace
+WORKDIR /workspace
 
 RUN bedGraphToBigWig 2>&1 | grep -i "Usage"
 
