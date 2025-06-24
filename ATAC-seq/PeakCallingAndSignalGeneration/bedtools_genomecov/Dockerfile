@@ -10,7 +10,7 @@ RUN apt-get update && \
         build-essential \
         zlib1g-dev && \
     apt-get clean
-WOKRDIR /src    
+WORKRDIR /src    
 RUN git clone --depth 1 https://github.com/arq5x/bedtools2.git 
 WORKDIR /src/bedtools2
 RUN make -j4
