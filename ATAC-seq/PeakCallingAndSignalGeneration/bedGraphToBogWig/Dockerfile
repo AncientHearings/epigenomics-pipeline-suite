@@ -14,8 +14,8 @@ FROM ubuntu:20.04 AS compiler
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
-    apt-get install -y curl tar mkdir   && \
-    mkdir -p /opt/ucsc
+    apt-get install -y curl tar&& \
+    mkdir -p /opt/ucsc && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
