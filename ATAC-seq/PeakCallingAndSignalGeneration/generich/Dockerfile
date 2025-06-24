@@ -17,8 +17,8 @@ RUN apt-get update && \
         wget \
         python3 \
         python3-pip && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+     apt-get clean  && \
+     rm -rf /var/lib/apt/lists/* 
     
 #CLONE AND SETUP GENERICH...........................................    
 RUN  git clone https://github.com/jsh58/Genrich.git /opt/Genrich && \
