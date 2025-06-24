@@ -5,14 +5,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 LABEL maintainer="Himanshu_Bhandary 2032ushimanshu@gmail.com"
 LABEL description="Dockerfile for  deeptools"
 
-ARG DEEPTOOLS_VERSION=3.5.4
+ARG DEEPTOOLS_VERSION=3.5.6
 #Available only build time only.
 #Accepts values from docker build --build-arg 
 #Provides default if not specified
 #Disappearsa after build.
 
 
-ENV DEEPTOOLS_VERSION  = ${DEEPTOOLS_VERSION}
+ENV DEEPTOOLS_VERSION=${DEEPTOOLS_VERSION}
 #Build time and runtime
 #Create environment variables that persist in the final image
 #Available inside runtime containers
@@ -20,10 +20,10 @@ ENV DEEPTOOLS_VERSION  = ${DEEPTOOLS_VERSION}
 
 
 
+RUN echo "Installing deeptools version: ${DEEPTOOLS_VERSION}"
 
-
-RUN  conda install -y -c bioconda deeptools=${DEEPTOOLS_VERSION} && \
-     conda clean -afy
+RUN  conda install -y -c bioconda deeptools=${DEEPTOOLS_VERSION} && conda clean -afy
+   
      
 WORKDIR /workspace
 
