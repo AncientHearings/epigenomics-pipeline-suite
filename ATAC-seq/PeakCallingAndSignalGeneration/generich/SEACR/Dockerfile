@@ -1,9 +1,9 @@
-FROM ubuntu: 20.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
 
-LABEL maintainer="Himanshu Bhandary 2032ushimanshu@gmail.com
+LABEL maintainer="Himanshu Bhandary 2032ushimanshu@gmail.com"
 LABEL description="Dockerfile for SEACR"
 
 RUN apt-get  update && \
