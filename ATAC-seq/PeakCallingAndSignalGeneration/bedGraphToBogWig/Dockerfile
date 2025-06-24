@@ -13,6 +13,10 @@ FROM ubuntu:20.04 AS compiler
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get update && \
+    apt-get insatall -y curl tar && \\
+    mkdir -p /opt/ucsc
+
 RUN curl -O http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig && \
     chmod +x bedGraphToBigWig && \
     mv bedGraphToBigWig /opt/ucsc/
