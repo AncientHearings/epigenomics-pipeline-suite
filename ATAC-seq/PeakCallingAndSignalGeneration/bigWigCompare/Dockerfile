@@ -19,10 +19,7 @@ ENV DEEPTOOLS_VERSION=${DEEPTOOLS_VERSION}
 
 
 
-
-RUN echo "Installing deeptools version: ${DEEPTOOLS_VERSION}"
-
-RUN  conda install -y -c bioconda deeptools=${DEEPTOOLS_VERSION} && conda clean -afy
+RUN conda install -y python=3.8 -c bioconda deeptools=${DEEPTOOLS_VERSION} && conda clean -afy
    
      
 WORKDIR /workspace
