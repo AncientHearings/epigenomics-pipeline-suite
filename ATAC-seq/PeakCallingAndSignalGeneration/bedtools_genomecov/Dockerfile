@@ -10,7 +10,7 @@ RUN apt-get update && \
         build-essential \
         zlib1g-dev && \
     apt-get clean
-WORKRDIR /src    
+WORKDIR /src    
 RUN git clone --depth 1 https://github.com/arq5x/bedtools2.git 
 WORKDIR /src/bedtools2
 RUN make -j4
@@ -19,7 +19,7 @@ FROM ubuntu:20.04
 
 COPY --from=builder /src/bedtools2/bin/bedtools /usr/local/bin/bedtools
 
-WOKRDIR /workspace
+WORKRDIR /workspace
 
 ENTRYPOINT ["bedtools"]
 
