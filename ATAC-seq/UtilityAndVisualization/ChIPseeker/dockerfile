@@ -1,0 +1,24 @@
+FROM rocker/r-ver:4.3.2
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+LABEL maintainer="Himanshu:2032ushimanshu@gmail.com"
+LABEL description="Dockerfile for ChIPseeker"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxml2-dev libcurl4-openssl-dev libssl-dev libxt-dev \
+    libx11-dev zlib1g-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+    
+RUN R -e "install.packages('BiocManager', repos='https://cloud.r-project.org')" && \
+    R -e "BiocManager::install(c('ChIPseeker', 'TxDb.Hsapiens.UCSC.hg19.knownGene', \
+                                 'org.Hs.eg.db', 'clusterProfiler', 'rtracklayer', \
+                                 'ggplot2', 'ggupset', 'DOSE'))
+                                 
+WORKDIR /data
+
+CMD ["R"]
+
+#CMD is used because it can be overridden by user to run another command. Friendlier for debugging and scripting.
+
+
