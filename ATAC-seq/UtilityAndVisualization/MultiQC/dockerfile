@@ -1,0 +1,29 @@
+FROM python:3.10-slim 
+
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+LABLE maintainer="Himanshu: 2032ushimanshu@gmail.com"
+LABEL description="Dockerfile for multiqc"
+
+ARG VALUE=1.29 
+#accepts value from docker build --build-arg
+#Avaliable during buildtime only in multi-stage dockerfile 
+#1.29 is the derfault value
+ENV VERSION={VALUE}
+#Available during both i.e., runtime and buildtime in multi-stage file.
+#The value will not be accessible.
+
+
+RUN pip install --no-cache-dir multiqc=${VERSION}
+#--no-cache-dir removes cache
+
+WORKDIR /data
+
+ENTRYPOINT ["multiqc"]
+CMD ["--help"]
+
+
+
+
+
