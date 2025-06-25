@@ -13,8 +13,11 @@
 #touch MultiQC/dockerfile
 #touch MultiQC/dockerfile 
 
-mkdir ChIPseeker
-touch ChIPseeker/dockerfile
-touch ChIPseeker/jenkinsfile
+#mkdir ChIPseeker
+#touch ChIPseeker/dockerfile
+#touch ChIPseeker/jenkinsfile
 
+mkdir diffBind 
+touch diffBind/dockerfile
+touch diffBind/dockerfile 
 
