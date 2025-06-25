@@ -3,7 +3,7 @@ FROM python:3.10-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-LABLE maintainer="Himanshu: 2032ushimanshu@gmail.com"
+LABEL maintainer="Himanshu: 2032ushimanshu@gmail.com"
 LABEL description="Dockerfile for multiqc"
 
 ARG VALUE=1.29 
