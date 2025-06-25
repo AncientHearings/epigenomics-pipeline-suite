@@ -22,7 +22,7 @@ FROM openjdk:8-jre-slim AS runtime
 
 WORKDIR /app
 
-COPY --FROM=Downloader /download/igvtools_2.16.0 /app/igvtools   
+COPY --FROM=Downloader /downloads/igvtools_2.16.0 /app/igvtools   
 
 ENV PATH="/app/igvtools:$PATH"
 
