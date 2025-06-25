@@ -1,0 +1,28 @@
+#.................................................................
+FROM rocker/r-ver:4.3.2 AS builder 
+
+ENV DEBIAN_FRONTEND=noninteractive 
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxml2-dev libcurl4-openssl-dev libssl-dev libxt-dev \
+    libx11-dev zlib1g-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+    
+RUN R -e "install.packages('BiocManager', repos='https://cloud.r-project.org')" && \
+    R -e "BiocManager::install(c('DiffBind', 'DESeq2', 'edgeR', 'GenomicRanges', 'rtracklayer'))"
+
+#..................................................................
+FROM rocker/r-ver:4.3.2 AS runtime
+
+LABEL maintainer="Himanshu:2032ushimanshu@gmail.com"
+LABEL description="Dockerfile for diffBind"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY --from=builder /usr/local/lib/R/site-library /usr/local/lib/R/site-library
+
+WORKDIR /workspace
+
+CMD ["R"]
+
+
