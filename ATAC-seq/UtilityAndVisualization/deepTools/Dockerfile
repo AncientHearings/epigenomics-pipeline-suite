@@ -20,7 +20,7 @@ RUN pip install .
 #Related commands under one run 
 
 #Stage1: container build --> result saved --> Container removed.
-
+#The container is destroyed bu the filesystem is preserved.
 
 #.....................STAGE1...................................
 
