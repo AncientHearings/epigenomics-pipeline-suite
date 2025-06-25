@@ -1,0 +1,36 @@
+FROM rocker/r-ver:4.3.2 AS Builder
+
+ENV  DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxml2-dev libcurl4-openssl-dev libssl-dev libxt-dev \
+    libx11-dev zlib1g-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+    
+RUN R -e "install.packages('BiocManager', repos='https://cloud.r-project.org')" && \
+    R -e "BiocManager::install(c('ChIPseeker', 'TxDb.Hsapiens.UCSC.hg19.knownGene', \
+                                 'org.Hs.eg.db', 'clusterProfiler', 'rtracklayer', \
+                                 'ggplot2', 'ggupset', 'DOSE'))
+                                
+#......................................................................                               
+FROM rocker/r-ver:4.3.2 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+LABEL maintainer="Himanshu:2032ushimanshu@gmail.com"
+LABEL description="Dockerfile for ChIPseeker"
+
+
+COPY --from=builder /usr/local/lib/R/site-library  /usr/local/lib/R/site-library 
+#It was available in the directory in the above stage but not this stage. It's like copying from one OS to another. Right?
+
+#ENV PATH:/usr/local/lib/R/site-library:$PATH
+#PATH is for executable programs not libraries.
+#It uses libPATHS() internally.
+
+
+WORKDIR /data
+
+CMD ["R"]                                 
+                                 
+                                 
